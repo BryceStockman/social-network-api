@@ -7,12 +7,18 @@ const UsersSchema = new Schema({
   email: {
     type: String,
   },
-  thoughts: {
-    // Array of _id values referencing the Thought model
-  },
-  friends: {
-    // Array of _id values referencing the User model (self-reference)
-  },
+  thoughts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Thought',
+    },
+  ],
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 const Users = model('Users', UsersSchema);
