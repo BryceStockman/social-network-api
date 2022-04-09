@@ -5,6 +5,10 @@ const ThoughtSchema = new Schema(
   {
     thoughtText: {
       type: String,
+      required: true,
+      // Is this how you set maxlength?
+      minlength: 1,
+      maxlength: 280,
     },
     createdAt: {
       type: Date,
@@ -13,8 +17,10 @@ const ThoughtSchema = new Schema(
     },
     username: {
       type: String,
+      required: true,
+      ref: 'User',
     },
-    reactions: [ReplySchema],
+    reactions: [ReactionSchema],
   },
   {
     toJSON: {
@@ -33,9 +39,13 @@ const ReactionSchema = new Schema(
     },
     reactionBody: {
       type: String,
+      required: true,
+      // Is this how you set maxlength?
+      maxlength: 280,
     },
-    writtenBy: {
+    username: {
       type: String,
+      required: true,
     },
     createdAt: {
       type: Date,
@@ -52,10 +62,7 @@ const ReactionSchema = new Schema(
 
 // get total count of thoughts and replies on retrieval
 ThoughtSchema.virtual('reactionCount').get(function () {
-  return this.thoughts.reduce(
-    (total, thoughts) => total + thoughts.reaction.length + 1,
-    0
-  );
+  return this.thoughts.length;
 });
 
 const Thoughts = model('Thoughts', ThoughtSchema);
