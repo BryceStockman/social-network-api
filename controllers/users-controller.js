@@ -24,7 +24,6 @@ const userController = {
       })
       .select('-__v')
       .then((dbUsersData) => {
-        // If no Users is found, send 404
         if (!dbUsersData) {
           res.status(404).json({ message: 'No user found with this id!' });
           return;
@@ -69,27 +68,27 @@ const userController = {
 
   addFriends({ params }, res) {
     Users.findOneAndUpdate(
-      { _id: params.userId },
+      { _id: params.usersId },
       { $push: { friends: params.friendsId } },
       { new: true, runValidators: true }
     )
-      .then((dbUserData) => {
-        if (!dbUserData) {
+      .then((dbUsersData) => {
+        if (!dbUsersData) {
           res.status(404).json({ message: 'No user found with this ID!' });
           return;
         }
-        res.json(dbUserData);
+        res.json(dbUsersData);
       })
       .catch((err) => res.json(err));
   },
 
   removeFriends({ params }, res) {
     Users.findOneAndUpdate(
-      { _id: params.userId },
+      { _id: params.usersId },
       { $pull: { friends: params.friendsId } },
       { new: true }
     )
-      .then((dbUserData) => res.json(dbUserData))
+      .then((dbUsersData) => res.json(dbUsersData))
       .catch((err) => res.json(err));
   },
 };
