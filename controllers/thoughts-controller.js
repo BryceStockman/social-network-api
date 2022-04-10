@@ -6,7 +6,6 @@ const thoughtsController = {
       .populate({
         path: 'thoughtText',
       })
-      .sort({ _id: -1 })
       .then((dbUsersData) => res.json(dbUsersData))
       .catch((err) => {
         console.log(err);
