@@ -1,4 +1,4 @@
-const { Users } = require('../models');
+const { Users, Thoughts } = require('../models');
 
 const userController = {
   getAllUsers(req, res) {
@@ -20,7 +20,9 @@ const userController = {
     Users.findOne({ _id: params.id })
       .populate({
         path: 'thoughts',
-        select: '-__v',
+      })
+      .populate({
+        path: 'friends',
       })
       .select('-__v')
       .then((dbUsersData) => {
@@ -43,7 +45,11 @@ const userController = {
   },
 
   updateUsers({ params, body }, res) {
-    Users.findOneAndUpdate({ _id: params.id }, body, { new: true })
+    Users.findOneAndUpdate(
+      { _id: params.id },
+      { $set: body },
+      { new: true, runValidators: true }
+    )
       .then((dbUsersData) => {
         if (!dbUsersData) {
           res.status(404).json({ message: 'No user found with this id!' });
@@ -61,6 +67,10 @@ const userController = {
           res.status(404).json({ message: 'No user found with this id!' });
           return;
         }
+        return Thoughts.deleteMany({ _id: { $in: dbUsersData.thoughts } });
+      })
+      .then(() => {
+        // If there is an error here I can insert a message here instead
         res.json(dbUsersData);
       })
       .catch((err) => res.status(400).json(err));

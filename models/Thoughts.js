@@ -6,7 +6,6 @@ const ThoughtSchema = new Schema(
     thoughtText: {
       type: String,
       required: true,
-      // Is this how you set maxlength?
       minlength: 1,
       maxlength: 280,
     },
@@ -40,7 +39,6 @@ const ReactionSchema = new Schema(
     reactionBody: {
       type: String,
       required: true,
-      // Is this how you set maxlength?
       maxlength: 280,
     },
     username: {

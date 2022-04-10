@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const apiRoutes = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
 
-app.use('/api', require('./routes/api'));
+app.use(apiRoutes);
 
 mongoose.connect(
   process.env.MONGODB_URI || 'mongodb://localhost:27017/social-network',
